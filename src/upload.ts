@@ -1,4 +1,4 @@
-import { Dropbox, files, DropboxResponse } from 'dropbox'
+import { Dropbox, files } from 'dropbox'
 import fetch from 'node-fetch'
 
 export function makeUpload(accessToken: string): {
@@ -10,21 +10,24 @@ export function makeUpload(accessToken: string): {
       autorename: boolean
       mute: boolean
     }
-  ) => Promise<DropboxResponse<files.FileMetadata>>
+  ) => Promise<void>
+  createLink: (path: string) => Promise<string>
 } {
   const dropbox = new Dropbox({ accessToken, fetch })
 
   return {
     upload: async (path, contents, options) => {
-      const res = await dropbox.filesUpload({
+      await dropbox.filesUpload({
         path,
         contents,
         mode: getMode(options.mode),
         autorename: options.autorename,
         mute: options.mute,
       })
-
-      return res
+    },
+    createLink: async (path) => {
+      const result = await dropbox.sharingCreateSharedLinkWithSettings({ path })
+      return result.result.url
     },
   }
 }
