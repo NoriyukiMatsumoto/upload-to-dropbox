@@ -22,11 +22,15 @@ jobs:
         run: |
           echo "Hello" > file.txt
       - name: Upload a file
+        id: upload
         uses: ./
         with:
           dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
           src: file.txt
           dest: /test/my-file.txt
+      - name: output
+        run: |
+          echo "${{steps.upload.outputs.shared_link}}"
       - name: Update file
         run: |
           echo "Hello updated" > file.txt
@@ -37,8 +41,3 @@ jobs:
           src: file.txt
           dest: /test/my-file.txt
           mode: overwrite
-      - name: Create files
-        run: |
-          mkdir files
-          echo "Hello" > files/file-0.txt
-          echo "Hello" > files/file-1.txt

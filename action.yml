@@ -15,10 +15,6 @@ inputs:
     required: false
     default: '/'
     description: "Destination path for upload. e.g. '/file.txt', '/dest/'"
-  url_dest_path:
-    required: false
-    default: '/url.txt'
-    description: "Destination path for upload. e.g. '/url.txt', '/url/upload_url.txt'"
   mode:
     required: false
     default: 'add'

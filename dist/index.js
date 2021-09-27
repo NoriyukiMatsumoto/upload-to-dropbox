@@ -35,7 +35,6 @@ const dropbox_1 = __nccwpck_require__(939);
 const accessToken = core.getInput('dropbox_access_token');
 const src = core.getInput('src');
 const dest = core.getInput('dest');
-const url_dest_path = core.getInput('url_dest_path');
 const mode = core.getInput('mode');
 const autorename = (0, utils_1.asBoolean)(core.getInput('autorename'));
 const mute = (0, utils_1.asBoolean)(core.getInput('mute'));
@@ -49,14 +48,14 @@ async function run() {
             core.info(`Uploaded: ${src} -> ${path}`);
             const url = await createLink(path);
             core.info(`create shared link: ${url}`);
-            await fs.promises.writeFile(url_dest_path, url);
+            core.setOutput('shared_link', url);
         }
         else {
             await upload(dest, contents, { mode, autorename, mute });
             core.info(`Uploaded: ${src} -> ${dest}`);
             const url = await createLink(dest);
             core.info(`create shared link: ${url}`);
-            await fs.promises.writeFile(url_dest_path, url);
+            core.setOutput('shared_link', url);
         }
     }
     catch (error) {
