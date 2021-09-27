@@ -8,7 +8,7 @@ import { DropboxResponseError } from 'dropbox'
 const accessToken = core.getInput('dropbox_access_token')
 const src = core.getInput('src')
 const dest = core.getInput('dest')
-const url_dest_path = core.getInput('url_dest_path')
+// const url_dest_path = core.getInput('url_dest_path')
 const mode = core.getInput('mode')
 const autorename = asBoolean(core.getInput('autorename'))
 const mute = asBoolean(core.getInput('mute'))

@@ -11,8 +11,8 @@
     "lint:eslint": "eslint --ext .js,.ts .",
     "lint:prettier": "prettier **/*.{js,ts} --check",
     "fix": "run-s fix:eslint fix:prettier",
-    "fix:eslint": "npm run lint:eslint -- --fix",
-    "fix:prettier": "npm run lint:prettier -- --write",
+    "fix:eslint": "yarn lint:eslint -- --fix",
+    "fix:prettier": "yarn lint:prettier -- --write",
     "test": "jest --passWithNoTests",
     "all": "run-s lint test build package"
   },
