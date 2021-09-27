@@ -89,42 +89,20 @@ function makeUpload(accessToken) {
             await dropbox.filesUpload({
                 path,
                 contents,
-                mode: getMode(options.mode),
+                mode: { '.tag': 'add' },
                 autorename: options.autorename,
                 mute: options.mute,
             });
         },
         createLink: async (path) => {
-            try {
-                const result = await dropbox.sharingCreateSharedLinkWithSettings({
-                    path,
-                });
-                return result.result.url;
-            }
-            catch (error) {
-                if (error instanceof dropbox_1.DropboxResponseError) {
-                    const result = await dropbox.sharingGetFileMetadata({ file: path });
-                    return result.result.preview_url;
-                }
-                throw error;
-            }
+            const result = await dropbox.sharingCreateSharedLinkWithSettings({
+                path,
+            });
+            return result.result.url;
         },
     };
 }
 exports.makeUpload = makeUpload;
-function getMode(mode) {
-    switch (mode) {
-        case 'overwrite':
-            return {
-                '.tag': 'overwrite',
-            };
-        case 'add':
-        default:
-            return {
-                '.tag': 'add',
-            };
-    }
-}
 
 
 /***/ }),

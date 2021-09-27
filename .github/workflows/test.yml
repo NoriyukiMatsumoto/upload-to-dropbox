@@ -31,13 +31,3 @@ jobs:
       - name: output
         run: |
           echo "${{steps.upload.outputs.shared_link}}"
-      - name: Update file
-        run: |
-          echo "Hello updated" > file.txt
-      - name: Overwrite file on Dropbox
-        uses: ./
-        with:
-          dropbox_access_token: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
-          src: file.txt
-          dest: /test/my-file.txt
-          mode: overwrite
