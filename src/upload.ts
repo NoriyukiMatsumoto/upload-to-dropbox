@@ -33,8 +33,8 @@ export function makeUpload(accessToken: string): {
         return result.result.url
       } catch (error) {
         if (error instanceof DropboxResponseError) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          return error.error.shared_link_already_exists.url as string
+          const result = await dropbox.sharingGetFileMetadata({ file: path })
+          return result.result.preview_url
         }
         throw error
       }

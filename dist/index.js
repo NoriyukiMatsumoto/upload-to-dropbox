@@ -103,8 +103,8 @@ function makeUpload(accessToken) {
             }
             catch (error) {
                 if (error instanceof dropbox_1.DropboxResponseError) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    return error.error.shared_link_already_exists.url;
+                    const result = await dropbox.sharingGetFileMetadata({ file: path });
+                    return result.result.preview_url;
                 }
                 throw error;
             }
