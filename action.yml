@@ -32,5 +32,5 @@ inputs:
     default: 'false'
     description: "If true, this tells the clients that this modification shouldn't result in a user notification. default: false"
 runs:
-  using: 'node16'
+  using: 'node12'
   main: 'dist/index.js'
