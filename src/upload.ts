@@ -1,4 +1,4 @@
-import { Dropbox, files } from 'dropbox'
+import { Dropbox, files, DropboxResponseError } from 'dropbox'
 import fetch from 'node-fetch'
 
 export function makeUpload(accessToken: string): {
@@ -26,8 +26,18 @@ export function makeUpload(accessToken: string): {
       })
     },
     createLink: async (path) => {
-      const result = await dropbox.sharingCreateSharedLinkWithSettings({ path })
-      return result.result.url
+      try {
+        const result = await dropbox.sharingCreateSharedLinkWithSettings({
+          path,
+        })
+        return result.result.url
+      } catch (error) {
+        if (error instanceof DropboxResponseError) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          return error.error.shared_link_already_exists.url as string
+        }
+        throw error
+      }
     },
   }
 }

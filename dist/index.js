@@ -95,8 +95,19 @@ function makeUpload(accessToken) {
             });
         },
         createLink: async (path) => {
-            const result = await dropbox.sharingCreateSharedLinkWithSettings({ path });
-            return result.result.url;
+            try {
+                const result = await dropbox.sharingCreateSharedLinkWithSettings({
+                    path,
+                });
+                return result.result.url;
+            }
+            catch (error) {
+                if (error instanceof dropbox_1.DropboxResponseError) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    return error.error.shared_link_already_exists.url;
+                }
+                throw error;
+            }
         },
     };
 }
