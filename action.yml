@@ -23,6 +23,9 @@ inputs:
     required: false
     default: 'false'
     description: "If true, this tells the clients that this modification shouldn't result in a user notification. default: false"
+outputs:
+  shared_link:
+    description: 'shared link'
 runs:
   using: 'node12'
   main: 'dist/index.js'
