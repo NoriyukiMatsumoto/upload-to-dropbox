@@ -35,22 +35,28 @@ const dropbox_1 = __nccwpck_require__(939);
 const accessToken = core.getInput('dropbox_access_token');
 const src = core.getInput('src');
 const dest = core.getInput('dest');
-// const url_dest_path = core.getInput('url_dest_path')
+const url_dest_path = core.getInput('url_dest_path');
 const mode = core.getInput('mode');
 const autorename = (0, utils_1.asBoolean)(core.getInput('autorename'));
 const mute = (0, utils_1.asBoolean)(core.getInput('mute'));
 async function run() {
     try {
-        const { upload } = (0, upload_1.makeUpload)(accessToken);
+        const { upload, createLink } = (0, upload_1.makeUpload)(accessToken);
         const contents = await fs.promises.readFile(src);
         if ((0, utils_1.isDirectory)(dest)) {
             const path = (0, path_1.join)(dest, (0, path_1.basename)(src));
             await upload(path, contents, { mode, autorename, mute });
             core.info(`Uploaded: ${src} -> ${path}`);
+            const url = await createLink(path);
+            core.info(`create shared link: ${url}`);
+            await fs.promises.writeFile(url_dest_path, url);
         }
         else {
             await upload(dest, contents, { mode, autorename, mute });
             core.info(`Uploaded: ${src} -> ${dest}`);
+            const url = await createLink(dest);
+            core.info(`create shared link: ${url}`);
+            await fs.promises.writeFile(url_dest_path, url);
         }
     }
     catch (error) {
@@ -81,14 +87,17 @@ function makeUpload(accessToken) {
     const dropbox = new dropbox_1.Dropbox({ accessToken, fetch: node_fetch_1.default });
     return {
         upload: async (path, contents, options) => {
-            const res = await dropbox.filesUpload({
+            await dropbox.filesUpload({
                 path,
                 contents,
                 mode: getMode(options.mode),
                 autorename: options.autorename,
                 mute: options.mute,
             });
-            return res;
+        },
+        createLink: async (path) => {
+            const result = await dropbox.sharingCreateSharedLinkWithSettings({ path });
+            return result.result.url;
         },
     };
 }
