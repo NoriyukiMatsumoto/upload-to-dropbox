@@ -28,8 +28,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.7",
-    "dropbox": "^9.7.0",
-    "globby": "^11.0.3",
+    "dropbox": "^10.10.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {

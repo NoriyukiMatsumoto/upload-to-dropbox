@@ -1,9 +1,7 @@
-import { Dropbox, files } from 'dropbox'
+import { Dropbox, files, DropboxResponse } from 'dropbox'
 import fetch from 'node-fetch'
 
-export function makeUpload(
-  accessToken: string
-): {
+export function makeUpload(accessToken: string): {
   upload: (
     path: string,
     contents: Buffer,
@@ -12,19 +10,21 @@ export function makeUpload(
       autorename: boolean
       mute: boolean
     }
-  ) => Promise<void>
+  ) => Promise<DropboxResponse<files.FileMetadata>>
 } {
   const dropbox = new Dropbox({ accessToken, fetch })
 
   return {
     upload: async (path, contents, options) => {
-      await dropbox.filesUpload({
+      const res = await dropbox.filesUpload({
         path,
         contents,
         mode: getMode(options.mode),
         autorename: options.autorename,
         mute: options.mute,
       })
+
+      return res
     },
   }
 }
