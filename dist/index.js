@@ -97,6 +97,9 @@ function makeUpload(accessToken) {
         createLink: async (path) => {
             const result = await dropbox.sharingCreateSharedLinkWithSettings({
                 path,
+                settings: {
+                    audience: { '.tag': 'public' },
+                },
             });
             return result.result.url;
         },

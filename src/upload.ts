@@ -1,4 +1,4 @@
-import { Dropbox, files, DropboxResponseError } from 'dropbox'
+import { Dropbox, account, DropboxResponseError } from 'dropbox'
 import fetch from 'node-fetch'
 
 export function makeUpload(accessToken: string): {
@@ -28,6 +28,9 @@ export function makeUpload(accessToken: string): {
     createLink: async (path) => {
       const result = await dropbox.sharingCreateSharedLinkWithSettings({
         path,
+        settings: {
+          audience: { '.tag': 'public' },
+        },
       })
       return result.result.url
     },
